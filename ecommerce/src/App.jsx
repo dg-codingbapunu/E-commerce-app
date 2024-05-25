@@ -5,6 +5,8 @@ import ProductInfo from "./pages/productinfo/ProductInfo";
 import ScrollTop from "./components/scrollTop/ScrollTop";
 import CartPage from "./pages/cart/CartPage";
 import AllProduct from "./pages/allproduct/AllProduct";
+import Signup from "./pages/register/Signup";
+import Login from "./pages/register/Login";
 const App = () => {
   return (
     <div>
@@ -16,6 +18,8 @@ const App = () => {
           <Route path="/productinfo" element={<ProductInfo />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/allproduct" element={<AllProduct />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Router>
     </div>
