@@ -1,4 +1,7 @@
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import ProductDetail from "../../components/admin/ProductDetial";
+import OrderDetail from "../../components/admin/OrderDetail";
+import UserDetail from "../../components/admin/UserDetail";
 
 const AdminDashboard = () => {
   return (
@@ -27,10 +30,10 @@ const AdminDashboard = () => {
             {/* text  */}
             <div className="">
               <h1 className=" text-center text-lg text-pink-500">
-                <span className=" font-bold">Name :</span> Kamal Nayan Upadhyay
+                <span className=" font-bold">Name :</span> Patitapaban Panda
               </h1>
               <h1 className=" text-center text-lg text-pink-500">
-                <span className=" font-bold">Email :</span> test@gmail.com
+                <span className=" font-bold">Email :</span> pp195025@gmail.com
               </h1>
             </div>
           </div>
@@ -133,11 +136,17 @@ const AdminDashboard = () => {
               </Tab>
             </TabList>
 
-            <TabPanel>All Product</TabPanel>
+            <TabPanel>
+              <ProductDetail />
+            </TabPanel>
 
-            <TabPanel>All Order</TabPanel>
+            <TabPanel>
+              <OrderDetail />
+            </TabPanel>
 
-            <TabPanel>All User</TabPanel>
+            <TabPanel>
+              <UserDetail />
+            </TabPanel>
           </Tabs>
         </div>
       </div>
