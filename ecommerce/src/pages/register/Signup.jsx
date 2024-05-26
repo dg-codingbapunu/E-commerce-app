@@ -2,31 +2,42 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import myContext from "../../context/myContext";
-import toast from "react-hot-toast";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, fireDB } from "../../firebase/FirebaseConfig";
 import { Timestamp, addDoc, collection } from "firebase/firestore";
+import { auth, fireDB } from "../../firebase/FirebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import toast from "react-hot-toast";
 import Loader from "../../components/loader/Loader";
 
 const Signup = () => {
   const context = useContext(myContext);
   const { loading, setLoading } = context;
+
+  // navigate
   const navigate = useNavigate();
+
+  // User Signup State
   const [userSignup, setUserSignup] = useState({
     name: "",
     email: "",
     password: "",
     role: "user",
   });
-  // user sign up function
+
+  /**========================================================================
+   *                          User Signup Function
+   *========================================================================**/
+
   const userSignupFunction = async () => {
+    // validation
     if (
       userSignup.name === "" ||
       userSignup.email === "" ||
       userSignup.password === ""
     ) {
-      return toast.error("All fields are required");
+      toast.error("All Fields are required");
+      return; // Halt execution if validation fails
     }
+
     setLoading(true);
     try {
       const users = await createUserWithEmailAndPassword(
@@ -48,30 +59,36 @@ const Signup = () => {
           year: "numeric",
         }),
       };
-      // create user References
-      const userReference = collection(fireDB, "user");
-      // add user Detail
 
-      addDoc(userReference, user);
+      // create user Reference
+      const userReference = collection(fireDB, "user");
+
+      // Add User Detail
+      await addDoc(userReference, user);
 
       setUserSignup({
         name: "",
         email: "",
         password: "",
+        role: "user",
       });
-      toast.success("Signup sucessfully");
+
+      toast.success("Signup Successfully");
+
       setLoading(false);
       navigate("/login");
     } catch (error) {
       console.log(error);
+      toast.error("Signup Failed");
       setLoading(false);
     }
   };
+
   return (
     <div className="flex justify-center items-center h-screen">
       {loading && <Loader />}
       {/* Login Form  */}
-      <div className="login_Form bg-pink-50 px-1 lg:px-8 py-6 border border-pink-100 rounded-xl shadow-md">
+      <div className="login_Form bg-pink-50 px-8 py-6 border border-pink-100 rounded-xl shadow-md">
         {/* Top Heading  */}
         <div className="mb-5">
           <h2 className="text-center text-2xl font-bold text-pink-500 ">
