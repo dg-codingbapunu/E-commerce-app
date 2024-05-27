@@ -53,7 +53,7 @@ const App = () => {
             }
           />
           <Route
-            path="updateproduct"
+            path="updateproduct/:id"
             element={
               <ProctedRouteForAdmin>
                 <UpdateProductPage />
