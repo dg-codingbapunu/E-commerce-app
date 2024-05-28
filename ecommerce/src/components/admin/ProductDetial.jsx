@@ -2,11 +2,29 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import myContext from "../../context/myContext";
 import Loader from "../loader/Loader";
+import { deleteDoc, doc } from "firebase/firestore";
+import { fireDB } from "../../firebase/FirebaseConfig";
 
 const ProductDetail = () => {
   const context = useContext(myContext);
-  const { loading, getAllProduct } = context;
+  const { loading, getAllProduct, setLoading, getAllProductFunction } = context;
   const navigate = useNavigate();
+
+  // delete fuction
+  const deleteProduct = async (id) => {
+    setLoading(true);
+
+    try {
+      await deleteDoc(doc(fireDB, "product", id));
+      toast.success("Product deleted successfully");
+      getAllProductFunction();
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <div className="py-5 flex justify-between items-center">
@@ -110,7 +128,10 @@ const ProductDetail = () => {
                   >
                     Edit
                   </td>
-                  <td className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 text-red-500 cursor-pointer ">
+                  <td
+                    onClick={() => deleteProduct(id)}
+                    className="h-12 px-6 text-md transition duration-300 border-t border-l first:border-l-0 border-pink-100 stroke-slate-500 text-slate-500 text-red-500 cursor-pointer "
+                  >
                     Delete
                   </td>
                 </tr>
