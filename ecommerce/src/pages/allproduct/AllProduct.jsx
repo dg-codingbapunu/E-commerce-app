@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import Layout from "../../components/layout/Layout";
 import { useContext } from "react";
 import myContext from "../../context/myContext";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/layout/loader/Loader";
 const AllProduct = () => {
   const navigate = useNavigate();
   const context = useContext(myContext);
@@ -29,7 +29,7 @@ const AllProduct = () => {
                   <div key={index} className="p-4 w-full md:w-1/4">
                     <div className="h-full border border-gray-300 rounded-xl overflow-hidden shadow-md cursor-pointer">
                       <img
-                        onClick={() => navigate("/productinfo")}
+                        onClick={() => navigate(`/productinfo/${id}`)}
                         className="lg:h-80  h-96 w-full"
                         src={productImageUrl}
                         alt="blog"

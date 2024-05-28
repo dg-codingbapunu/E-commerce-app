@@ -6,7 +6,7 @@ import { Timestamp, addDoc, collection } from "firebase/firestore";
 import { auth, fireDB } from "../../firebase/FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import toast from "react-hot-toast";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/layout/loader/Loader";
 
 const Signup = () => {
   const context = useContext(myContext);

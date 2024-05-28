@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Timestamp, addDoc, collection } from "firebase/firestore";
 import toast from "react-hot-toast";
 import { fireDB } from "../../firebase/FirebaseConfig";
-import Loader from "../../components/loader/Loader";
+import Loader from "../../components/layout/loader/Loader";
 
 const categoryList = [
   {
