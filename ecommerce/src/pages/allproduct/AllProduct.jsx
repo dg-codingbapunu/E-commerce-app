@@ -1,12 +1,36 @@
 import { useNavigate } from "react-router";
 import Layout from "../../components/layout/Layout";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import myContext from "../../context/myContext";
-import Loader from "../../components/layout/loader/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { addToCart, deleteFromCart } from "../../redux/cartSlice";
+
 const AllProduct = () => {
   const navigate = useNavigate();
+
   const context = useContext(myContext);
-  const { getAllProduct, loading } = context;
+  const { getAllProduct } = context;
+
+  const cartItems = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  const addCart = (item) => {
+    // console.log(item)
+    dispatch(addToCart(item));
+    toast.success("Add to cart");
+  };
+
+  const deleteCart = (item) => {
+    dispatch(deleteFromCart(item));
+    toast.success("Delete cart");
+  };
+
+  // console.log(cartItems)
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cartItems));
+  }, [cartItems]);
   return (
     <Layout>
       <div className="py-8">
@@ -20,8 +44,6 @@ const AllProduct = () => {
         {/* main  */}
         <section className="text-gray-600 body-font">
           <div className="container px-5 lg:px-0 py-5 mx-auto">
-            <div className="flex justify-center">{loading && <Loader />}</div>
-
             <div className="flex flex-wrap -m-4">
               {getAllProduct.map((item, index) => {
                 const { id, title, price, productImageUrl } = item;
@@ -46,9 +68,21 @@ const AllProduct = () => {
                         </h1>
 
                         <div className="flex justify-center ">
-                          <button className=" bg-pink-500 hover:bg-pink-600 w-full text-white py-[4px] rounded-lg font-bold">
-                            Add To Cart
-                          </button>
+                          {cartItems.some((p) => p.id === item.id) ? (
+                            <button
+                              onClick={() => deleteCart(item)}
+                              className=" bg-red-700 hover:bg-pink-600 w-full text-white py-[4px] rounded-lg font-bold"
+                            >
+                              Delete To Cart
+                            </button>
+                          ) : (
+                            <button
+                              onClick={() => addCart(item)}
+                              className=" bg-pink-500 hover:bg-pink-600 w-full text-white py-[4px] rounded-lg font-bold"
+                            >
+                              Add To Cart
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>

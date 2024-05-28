@@ -1,9 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
 import SearchBar from "../searchbar/SearchBar";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   // get user from localStorage
-  const user = JSON.parse(localStorage.getItem("users")) || null;
+  const user = JSON.parse(localStorage.getItem("users"));
 
   // navigate
   const navigate = useNavigate();
@@ -13,6 +14,9 @@ const Navbar = () => {
     localStorage.clear("users");
     navigate("/login");
   };
+
+  // CartItems
+  const cartItems = useSelector((state) => state.cart) || [];
 
   // navList Data
   const navList = (
@@ -55,37 +59,37 @@ const Navbar = () => {
         </li>
       )}
 
-      {/* logout */}
+      {/* Logout */}
       {user && (
-        <li className=" cursor-pointer" onClick={logout}>
+        <li className="cursor-pointer" onClick={logout}>
           Logout
         </li>
       )}
 
       {/* Cart */}
       <li>
-        <Link to={"/cart"}>Cart(0)</Link>
+        <Link to={"/cart"}>Cart({cartItems.length})</Link>
       </li>
     </ul>
   );
 
   return (
     <nav className="bg-pink-600 sticky top-0">
-      {/* main  */}
+      {/* main */}
       <div className="lg:flex lg:justify-between items-center py-3 lg:px-3 ">
-        {/* left  */}
+        {/* left */}
         <div className="left py-3 lg:py-0">
           <Link to={"/"}>
-            <h2 className=" font-bold text-white text-2xl text-center">
+            <h2 className="font-bold text-white text-2xl text-center">
               E-Bharat
             </h2>
           </Link>
         </div>
 
-        {/* right  */}
+        {/* right */}
         <div className="right flex justify-center mb-4 lg:mb-0">{navList}</div>
 
-        {/* Search Bar  */}
+        {/* Search Bar */}
         <SearchBar />
       </div>
     </nav>
