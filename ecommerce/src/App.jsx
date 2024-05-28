@@ -15,6 +15,7 @@ import MyState from "./context/myState";
 import { Toaster } from "react-hot-toast";
 import { ProctedRouteForUser } from "./protectedRoute/ProctedRouteForUser";
 import { ProctedRouteForAdmin } from "./protectedRoute/ProtectedRouteForAdmin";
+import CategoryPage from "./pages/category/CategoryPage";
 const App = () => {
   return (
     <MyState>
@@ -28,6 +29,7 @@ const App = () => {
           <Route path="/allproduct" element={<AllProduct />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/category/:categoryname" element={<CategoryPage />} />
           <Route
             path="/user-dashboard"
             element={
