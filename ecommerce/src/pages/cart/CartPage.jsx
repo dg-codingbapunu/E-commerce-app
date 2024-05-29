@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RiDeleteBin7Fill } from "react-icons/ri";
-
 import Layout from "../../components/layout/Layout";
 
 import {
@@ -97,7 +96,7 @@ const CartPage = () => {
         pincode: "",
         mobileNumber: "",
       });
-      toast.success("Order Placed Successfull");
+      toast.success("Order Placed Successfully");
     } catch (error) {
       console.log(error);
     }

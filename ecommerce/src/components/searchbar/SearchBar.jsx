@@ -1,52 +1,20 @@
-import { useState } from "react";
-
-// Search Data
-const searchData = [
-  {
-    name: "Fashion",
-    image:
-      "https://i.pinimg.com/564x/3e/05/ce/3e05cefbc7eec79ac175ea8490a67939.jpg",
-  },
-  {
-    name: "Shirt",
-    image:
-      "https://i.pinimg.com/736x/e4/61/f2/e461f2246b6ad93e2099d98780626396.jpg",
-  },
-  {
-    name: "Jacket",
-    image:
-      "https://i.pinimg.com/564x/fd/50/68/fd50688767adb47aba7204f034554cbd.jpg",
-  },
-  {
-    name: "Mobile",
-    image:
-      "https://i.pinimg.com/564x/22/80/8d/22808d88ada424962f2e064f3075b2d1.jpg",
-  },
-  {
-    name: "Laptop",
-    image:
-      "https://i.pinimg.com/564x/3e/05/ce/3e05cefbc7eec79ac175ea8490a67939.jpg",
-  },
-  {
-    name: "Home",
-    image:
-      "https://i.pinimg.com/736x/e4/61/f2/e461f2246b6ad93e2099d98780626396.jpg",
-  },
-  {
-    name: "book",
-    image:
-      "https://i.pinimg.com/564x/fd/50/68/fd50688767adb47aba7204f034554cbd.jpg",
-  },
-];
+import { useContext, useState } from "react";
+import myContext from "../../context/myContext";
+import { useNavigate } from "react-router";
 
 const SearchBar = () => {
+  const context = useContext(myContext);
+  const { getAllProduct } = context;
   // Search State
   const [search, setSearch] = useState("");
 
   // Filter Search Data
-  const filterSearchData = searchData
-    .filter((obj) => obj.name.toLowerCase().includes(search))
+  const filterSearchData = getAllProduct
+    .filter((obj) => obj.title.toLowerCase().includes(search))
     .slice(0, 8);
+
+  const navigate = useNavigate();
+
   return (
     <div className="">
       {/* search input  */}
@@ -67,10 +35,18 @@ const SearchBar = () => {
               <>
                 {filterSearchData.map((item, index) => {
                   return (
-                    <div key={index} className="py-2 px-2">
+                    <div
+                      key={index}
+                      className="py-2 px-2 cursor-pointer"
+                      onClick={() => navigate(`/productinfo/${item.id}`)}
+                    >
                       <div className="flex items-center gap-2">
-                        <img className="w-10" src={item.image} alt="" />
-                        {item.name}
+                        <img
+                          className="w-10"
+                          src={item.productImageUrl}
+                          alt=""
+                        />
+                        {item.title}
                       </div>
                     </div>
                   );
