@@ -1,13 +1,19 @@
 import { useDispatch, useSelector } from "react-redux";
+import { RiDeleteBin7Fill } from "react-icons/ri";
+
 import Layout from "../../components/layout/Layout";
-import { MdDelete } from "react-icons/md";
+
 import {
   decrementQuantity,
   deleteFromCart,
   incrementQuantity,
 } from "../../redux/cartSlice";
 import toast from "react-hot-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Timestamp, addDoc, collection } from "firebase/firestore";
+import { fireDB } from "../../firebase/FirebaseConfig";
+import BuyNowModal from "../../components/buyNowModal/BuyNowModal";
+import { Navigate } from "react-router";
 
 const CartPage = () => {
   const cartItems = useSelector((state) => state.cart);
@@ -39,9 +45,66 @@ const CartPage = () => {
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  // user
+  const user = JSON.parse(localStorage.getItem("users"));
+
+  // Buy Now Function
+  const [addressInfo, setAddressInfo] = useState({
+    name: "",
+    address: "",
+    pincode: "",
+    mobileNumber: "",
+    time: Timestamp.now(),
+    date: new Date().toLocaleString("en-US", {
+      month: "short",
+      day: "2-digit",
+      year: "numeric",
+    }),
+  });
+
+  const buyNowFunction = () => {
+    // validation
+    if (
+      addressInfo.name === "" ||
+      addressInfo.address === "" ||
+      addressInfo.pincode === "" ||
+      addressInfo.mobileNumber === ""
+    ) {
+      return toast.error("All Fields are required");
+    }
+
+    // Order Info
+    const orderInfo = {
+      cartItems,
+      addressInfo,
+      email: user.email,
+      userid: user.uid,
+      status: "confirmed",
+      time: Timestamp.now(),
+      date: new Date().toLocaleString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }),
+    };
+    try {
+      const orderRef = collection(fireDB, "order");
+      addDoc(orderRef, orderInfo);
+      setAddressInfo({
+        name: "",
+        address: "",
+        pincode: "",
+        mobileNumber: "",
+      });
+      toast.success("Order Placed Successfull");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Layout>
-      <div className="container mx-auto px-4 max-w-7xl px-2 lg:px-0">
+      <div className="container mx-auto px-4 max-w-7xl lg:px-0">
         <div className="mx-auto max-w-2xl py-8 lg:max-w-7xl">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Shopping Cart
@@ -129,7 +192,10 @@ const CartPage = () => {
                                 type="button"
                                 className="flex items-center space-x-1 px-2 py-1 pl-0"
                               >
-                                <MdDelete size={12} className="text-red-500" />
+                                <RiDeleteBin7Fill
+                                  size={12}
+                                  className="text-red-500"
+                                />
                                 <span className="text-xs font-medium text-red-500">
                                   Remove
                                 </span>
@@ -183,9 +249,15 @@ const CartPage = () => {
                 </dl>
                 <div className="px-2 pb-4 font-medium text-green-700">
                   <div className="flex gap-4 mb-6">
-                    <button className="w-full px-4 py-3 text-center text-gray-100 bg-pink-600 border border-transparent dark:border-gray-700 hover:border-pink-500 hover:text-pink-700 hover:bg-pink-100 rounded-xl">
-                      Buy now
-                    </button>
+                    {user ? (
+                      <BuyNowModal
+                        addressInfo={addressInfo}
+                        setAddressInfo={setAddressInfo}
+                        buyNowFunction={buyNowFunction}
+                      />
+                    ) : (
+                      <Navigate to={"/login"} />
+                    )}
                   </div>
                 </div>
               </div>
